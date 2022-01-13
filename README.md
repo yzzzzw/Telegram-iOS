@@ -1,3 +1,5 @@
+# Fork Telegram-iOS项目，基于Telegram-iOS做二次开发
+
 # Telegram iOS Source Code Compilation Guide
 
 We welcome all developers to use our API and source code to create applications on our platform.
@@ -39,6 +41,7 @@ chmod +x bazel
 4. Adjust configuration parameters
 
 ```
+//这是将build-system/example-configuration/拷贝到$HOME/telegram-configuration/下，-R表示拷贝包括文件夹，这个项目不执行这个方法
 mkdir -p $HOME/telegram-configuration
 cp -R build-system/example-configuration/* $HOME/telegram-configuration/
 ```
