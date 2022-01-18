@@ -31,7 +31,6 @@ import Translate
 
 
 // MARK: Wellgram Imports
-import WGUI
 import WGStrings
 import WGTranslate
 import PeerInfoUI
@@ -1214,7 +1213,7 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
                 actions.append(.action(ContextMenuActionItem(text: l("Chat.ForwardAsCopy", chatPresentationInterfaceState.strings.baseLanguageCode), icon: { theme in
                     return generateTintedImage(image: UIImage(bundleImageName: "CopyForward"), color: theme.actionSheet.primaryTextColor)
                 }, action: { _, f in
-                        interfaceInteraction.copyForwardMessages(selectAll ? messages : [message])
+//                        interfaceInteraction.copyForwardMessages(selectAll ? messages : [message])
                     f(.dismissWithoutContent)
                 })))
             }

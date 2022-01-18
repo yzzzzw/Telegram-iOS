@@ -103,9 +103,9 @@ public func l(_ key: String, _ locale: String = "en") -> String {
     return result
 }
 
-///获取语言本地化文件路径
+///获取语言本地化文件路径，本地化文件上传github后的文件地址
 public func getStringsUrl(_ lang: String) -> String {
-    return "https://raw.githubusercontent.com/" + WGRepository +  "/translations/master/Telegram-iOS/" + lang + ".lproj/WellLocalizable.strings"
+    return "https://raw.githubusercontent.com/" + WGRepository +  "/Telegram-iOS/master/Telegram/Telegram-iOS/" + lang + ".lproj/WellLocalizable.strings"
 }
 
 
@@ -114,7 +114,7 @@ var niceWebLocales: [String: [String: String]] = [:]
 func getWebDict(_ lang: String) -> [String : String]? {
     return NSDictionary(contentsOf: URL(string: getStringsUrl(lang))!) as? [String : String]
 }
-
+//下载本地化文件内容
 public func downloadLocale(_ locale: String) -> Void {
     do {
         var lang = locale

@@ -304,8 +304,7 @@ objc_library(
     ],
 )
 
-WGRESOURCES = ["//Wellgram/WGUI:WGUIAssets"]
-WGRESOURCES_DEPS = ["//Wellgram/WGUI:WGUI"]
+WGRESOURCES = ["//Wellgram/WGData:WGUIAssets"]
 
 swift_library(
     name = "Lib",
@@ -328,7 +327,7 @@ swift_library(
     deps = [
         "//submodules/TelegramUI:TelegramUI",
         "//third-party/boringssl:crypto",
-    ] + WGRESOURCES_DEPS,
+    ],
 )
 
 plist_fragment(

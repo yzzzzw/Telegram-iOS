@@ -158,3 +158,72 @@ extension String {
         return components(separatedBy: characterSet).joined(separator: replacementString)
     }
 }
+
+// TODO: Google Api 后续开发
+public func googleTranslate(_ text: String, _ toLang: String) -> Signal<String, TranslateFetchError> {
+    return Signal { subscriber in
+        let urlString = getGoogleTranslateUrl(text, getGoogleLang(toLang))
+        let url = URL(string: urlString)!
+        let translateSignal = requestGoogleTranslateUrl(url: url)
+
+        let _ = (translateSignal |> deliverOnMainQueue).start(next: {
+            translatedHtml in
+            let result = parseTranslateResponse(translatedHtml)
+            if result.isEmpty {
+                subscriber.putError(.network) // Fake
+            } else {
+                subscriber.putNext(result)
+                subscriber.putCompletion()
+            }
+
+        }, error: { _ in
+            subscriber.putError(.network)
+        })
+
+        return ActionDisposable {
+        }
+    }
+}
+// TODO: Google Api 后续开发
+public func getGoogleTranslateUrl(_ message: String,_ toLang: String) -> String {
+    return ""
+}
+
+public func requestGoogleTranslateUrl(url: URL) -> Signal<String, TranslateFetchError> {
+    return Signal { subscriber in
+        let completed = Atomic<Bool>(value: false)
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        // Set headers
+        request.setValue("Mozilla/4.0 (compatible;MSIE 6.0;Windows NT 5.1;SV1;.NET CLR 1.1.4322;.NET CLR 2.0.50727;.NET CLR 3.0.04506.30)", forHTTPHeaderField: "User-Agent")
+        HTTPCookieStorage.shared.cookies?.forEach(HTTPCookieStorage.shared.deleteCookie)
+        let downloadTask = URLSession.shared.dataTask(with: request, completionHandler: { data, response, error in
+            let _ = completed.swap(true)
+            if let response = response as? HTTPURLResponse {
+                if response.statusCode == 200 {
+                    if let data = data {
+                        if let result = String(data: data, encoding: .utf8) {
+                            subscriber.putNext(result)
+                            subscriber.putCompletion()
+                        } else {
+                            subscriber.putError(.network)
+                        }
+                    } else {
+                        subscriber.putError(.network)
+                    }
+                } else {
+                    subscriber.putError(.network)
+                }
+            } else {
+                subscriber.putError(.network)
+            }
+        })
+        downloadTask.resume()
+
+        return ActionDisposable {
+            if !completed.with({ $0 }) {
+                downloadTask.cancel()
+            }
+        }
+    }
+}

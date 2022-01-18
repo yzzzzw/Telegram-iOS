@@ -5,7 +5,7 @@ load(
     "telegram_bundle_id",
 )
 
-WGDEPS = ["//Wellgram/WGData:WGData", "//Wellgram/WGWebUtils:WGWebUtils", "//Wellgram/WGUI:WGUI", "//Wellgram/WGStrings:WGStrings", "//Wellgram/WGTranslate:WGTranslate"]
+WGDEPS = ["//Wellgram/WGData:WGData", "//Wellgram/WGWebUtils:WGWebUtils", "//Wellgram/WGStrings:WGStrings", "//Wellgram/WGTranslate:WGTranslate"]
 
 filegroup(
     name = "TelegramUIResources",
