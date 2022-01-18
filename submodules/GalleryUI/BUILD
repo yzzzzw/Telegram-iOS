@@ -1,5 +1,7 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
+WGDEPS = ["//Wellgram/WGData:WGData"]
+
 swift_library(
     name = "GalleryUI",
     module_name = "GalleryUI",
@@ -40,7 +42,7 @@ swift_library(
         "//submodules/UndoUI:UndoUI",
         "//submodules/InvisibleInkDustNode:InvisibleInkDustNode",
         "//submodules/Translate:Translate",
-    ],
+    ] + WGDEPS,
     visibility = [
         "//visibility:public",
     ],

@@ -1,5 +1,7 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
+WGDEPS = ["//Wellgram/WGData:WGData"]
+
 swift_library(
     name = "ChatListUI",
     module_name = "ChatListUI",
@@ -62,7 +64,7 @@ swift_library(
         "//submodules/TelegramCallsUI:TelegramCallsUI",
         "//submodules/StickerResources:StickerResources",
         "//submodules/TextFormat:TextFormat",
-    ],
+    ] + WGDEPS,
     visibility = [
         "//visibility:public",
     ],

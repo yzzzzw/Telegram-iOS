@@ -62,6 +62,13 @@ python3 build-system/Make/Make.py \
     generateProject \
     --configurationPath="$HOME/telegram-configuration" \
     --disableExtensions
+    
+python3 build-system/Make/Make.py \
+    --bazel="$HOME/bazel-dist/bazel" \
+    --cacheDir="$HOME/telegram-bazel-cache" \
+    generateProject \
+    --configurationPath="build-system/example-configuration" \
+    --disableExtensions
 ```
 
 It is possible to generate a project that does not require any codesigning certificates to be installed: add `--disableProvisioningProfiles` flag:

@@ -118,6 +118,7 @@ def generate(build_environment: BuildEnvironment, disable_extensions, disable_pr
     for category in ['BazelBuildOptionsDebug', 'BazelBuildOptionsRelease']:
         tulsi_config_json['optionSet'][category]['p'] += ' {}'.format(additional_arguments_string)
     tulsi_config_json['sourceFilters'] = [
+        'Wellgram/...',
         '{}/...'.format(app_target),
         'submodules/...',
         'third-party/...'

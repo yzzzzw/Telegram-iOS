@@ -1,5 +1,7 @@
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library")
 
+WGDEPS = ["//Wellgram/WGData:WGData"]
+
 swift_library(
     name = "SettingsUI",
     module_name = "SettingsUI",
@@ -9,7 +11,7 @@ swift_library(
     copts = [
         "-warnings-as-errors",
     ],
-    deps = [
+    deps = WGDEPS + [
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/AsyncDisplayKit:AsyncDisplayKit",
         "//submodules/Display:Display",

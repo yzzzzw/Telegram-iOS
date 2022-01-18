@@ -303,6 +303,9 @@ objc_library(
     ],
 )
 
+WGRESOURCES = ["//Wellgram/WGUI:WGUIAssets"]
+WGRESOURCES_DEPS = ["//Wellgram/WGUI:WGUI"]
+
 swift_library(
     name = "Lib",
     srcs = glob([
@@ -320,11 +323,11 @@ swift_library(
         "//submodules/TelegramUI:TelegramUIResources",
         "//submodules/TelegramUI:TelegramUIAssets",
         ":GeneratedPresentationStrings/Resources/PresentationStrings.data",
-    ],
+    ] + WGRESOURCES,
     deps = [
         "//submodules/TelegramUI:TelegramUI",
         "//third-party/boringssl:crypto",
-    ],
+    ] + WGRESOURCES_DEPS,
 )
 
 plist_fragment(
@@ -352,6 +355,7 @@ plist_fragment(
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>telegram</string>
+	       <string>wellgram</string>
             </array>
         </dict>
         <dict>
@@ -388,11 +392,11 @@ official_apple_pay_merchants = [
 ]
 
 official_bundle_ids = [
-    "ph.telegra.Telegraph",
+    "well.telegra.Telegraph",
     "org.telegram.Telegram-iOS",
 ]
 
-apple_pay_merchants = official_apple_pay_merchants if telegram_bundle_id == "ph.telegra.Telegraph" else []
+apple_pay_merchants = official_apple_pay_merchants if telegram_bundle_id == "well.telegra.Telegraph" else []
 
 apple_pay_merchants_fragment = "" if apple_pay_merchants == [] else """
 <key>com.apple.developer.in-app-payments</key>
@@ -555,7 +559,7 @@ plist_fragment(
     template =
     """
     <key>CFBundleDisplayName</key>
-    <string>Telegram</string>
+    <string>Wellgram</string>
     """
 )
 
@@ -1703,11 +1707,11 @@ plist_fragment(
     <key>CFBundleDevelopmentRegion</key>
     <string>en</string>
     <key>CFBundleDisplayName</key>
-    <string>Telegram</string>
+    <string>Wellgram</string>
     <key>CFBundleIdentifier</key>
     <string>{telegram_bundle_id}</string>
     <key>CFBundleName</key>
-    <string>Telegram</string>
+    <string>Wellgram</string>
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleSignature</key>
@@ -1899,6 +1903,7 @@ ios_application(
         ":DisplayFramework",
         ":TelegramUIFramework",
     ],
+    settings_bundle = "//Wellgram/WGSettingsBundle:WGSettingsBundle",
     strings = [
         ":AppStringResources",
     ],

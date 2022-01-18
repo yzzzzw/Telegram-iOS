@@ -5,6 +5,7 @@ load(
     "telegram_bundle_id",
 )
 
+WGDEPS = ["//Wellgram/WGData:WGData", "//Wellgram/WGWebUtils:WGWebUtils", "//Wellgram/WGUI:WGUI", "//Wellgram/WGStrings:WGStrings", "//Wellgram/WGTranslate:WGTranslate"]
 
 filegroup(
     name = "TelegramUIResources",
@@ -41,7 +42,7 @@ swift_library(
     copts = [
         "-warnings-as-errors",
     ],
-    deps = [
+    deps = WGDEPS + [
         "//submodules/SSignalKit/SwiftSignalKit:SwiftSignalKit",
         "//submodules/SSignalKit/SSignalKit:SSignalKit",
         "//submodules/AsyncDisplayKit:AsyncDisplayKit",
