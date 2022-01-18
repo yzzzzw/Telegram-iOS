@@ -5822,7 +5822,39 @@ public final class ChatControllerImpl: TelegramBaseController, ChatController, G
             strongSelf.present(actionSheet, in: .window(.root))
         }
         
-        let interfaceInteraction = ChatPanelInterfaceInteraction(setupReplyMessage: { [weak self] messageId, completion in
+        let interfaceInteraction = ChatPanelInterfaceInteraction(cloudMessages: { messages in
+//            if let messages = messages {
+//                // Multiple
+//                if !messages.isEmpty {
+//                    self.commitPurposefulAction()
+//                    let forwardMessageIds = messages.map { $0.id }.sorted()
+//                    self.forwardMessages(messageIds: forwardMessageIds, cloud: true)
+//                }
+//            } else {
+//                // One
+//                self.commitPurposefulAction()
+//                if let forwardMessageIdsSet = self.presentationInterfaceState.interfaceState.selectionState?.selectedIds {
+//                    let forwardMessageIds = Array(forwardMessageIdsSet).sorted()
+//                    self.forwardMessages(messageIds: forwardMessageIds, cloud: true)
+//                }
+//            }
+    }, copyForwardMessages: { messages in
+//        if let messages = messages {
+//            // Multiple
+//            if !messages.isEmpty {
+//                self.commitPurposefulAction()
+//                let forwardMessageIds = messages.map { $0.id }.sorted()
+//                self.forwardMessages(messageIds: forwardMessageIds, asCopy: true)
+//            }
+//        } else {
+//            // One
+//            self.commitPurposefulAction()
+//            if let forwardMessageIdsSet = self.presentationInterfaceState.interfaceState.selectionState?.selectedIds {
+//                let forwardMessageIds = Array(forwardMessageIdsSet).sorted()
+//                self.forwardMessages(messageIds: forwardMessageIds, asCopy: true)
+//            }
+//        }
+    }, setupReplyMessage: { [weak self] messageId, completion in
             guard let strongSelf = self, strongSelf.isNodeLoaded else {
                 return
             }

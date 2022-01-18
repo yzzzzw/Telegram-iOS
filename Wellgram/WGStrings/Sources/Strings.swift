@@ -3,24 +3,17 @@ import AppBundle
 import WGData
 
 private func gd(locale: String) -> [String : String] {
-    return NSDictionary(contentsOf: URL(fileURLWithPath: getAppBundle().path(forResource: "NiceLocalizable", ofType: "strings", inDirectory: nil, forLocalization: locale)!)) as! [String : String]
+    return NSDictionary(contentsOf: URL(fileURLWithPath: getAppBundle().path(forResource: "WellLocalizable", ofType: "strings", inDirectory: nil, forLocalization: locale)!)) as! [String : String]
 }
 
 let niceLocales: [String : [String : String]] = [
-    "en" : gd(locale: "en"),
+    "en": gd(locale: "en"),
     "ru": gd(locale: "ru"),
     "ar": gd(locale: "ar"),
     "de": gd(locale: "de"),
     "it": gd(locale: "it"),
     "es": gd(locale: "es"),
     "uk": gd(locale: "uk"),
-    
-    // Chinese
-    // Simplified
-    "zh-hans": gd(locale: "zh-hans"),
-    // Traditional
-    "zh-hant": gd(locale: "zh-hant"),
-    
     "fa": gd(locale: "fa"),
     "pl": gd(locale: "pl"),
     "sk": gd(locale: "sk"),
@@ -29,6 +22,11 @@ let niceLocales: [String : [String : String]] = [
     "ko": gd(locale: "ko"),
     "ku": gd(locale: "ku"),
     "be": [:],
+    // Chinese
+    // Simplified
+    "zh-hans": gd(locale: "zh-hans"),
+    // Traditional
+    "zh-hant": gd(locale: "zh-hant"),
 ]
 
 public func getLangFallback(_ lang: String) -> String {
@@ -107,7 +105,7 @@ public func l(_ key: String, _ locale: String = "en") -> String {
 
 ///获取语言本地化文件路径
 public func getStringsUrl(_ lang: String) -> String {
-    return "https://raw.githubusercontent.com/" + WGRepository +  "/translations/master/Telegram-iOS/" + lang + ".lproj/NiceLocalizable.strings"
+    return "https://raw.githubusercontent.com/" + WGRepository +  "/translations/master/Telegram-iOS/" + lang + ".lproj/WellLocalizable.strings"
 }
 
 

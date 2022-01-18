@@ -49,6 +49,8 @@ enum ChatPanelRestrictionInfoDisplayType {
 }
 
 final class ChatPanelInterfaceInteraction {
+    let cloudMessages: ([Message]?) -> Void
+    let copyForwardMessages:  ([Message]?) -> Void
     let setupReplyMessage: (MessageId?, @escaping (ContainedViewLayoutTransition) -> Void) -> Void
     let setupEditMessage: (MessageId?, @escaping (ContainedViewLayoutTransition) -> Void) -> Void
     let beginMessageSelection: ([MessageId], @escaping (ContainedViewLayoutTransition) -> Void) -> Void
@@ -140,6 +142,8 @@ final class ChatPanelInterfaceInteraction {
     let statuses: ChatPanelInterfaceInteractionStatuses?
     
     init(
+        cloudMessages: @escaping ([Message]?) -> Void,
+        copyForwardMessages: @escaping ([Message]?) -> Void,
         setupReplyMessage: @escaping (MessageId?, @escaping (ContainedViewLayoutTransition) -> Void) -> Void,
         setupEditMessage: @escaping (MessageId?, @escaping (ContainedViewLayoutTransition) -> Void) -> Void,
         beginMessageSelection: @escaping ([MessageId], @escaping (ContainedViewLayoutTransition) -> Void) -> Void,
@@ -230,6 +234,8 @@ final class ChatPanelInterfaceInteraction {
         displayCopyProtectionTip: @escaping (ASDisplayNode, Bool) -> Void,
         statuses: ChatPanelInterfaceInteractionStatuses?
     ) {
+        self.cloudMessages = cloudMessages
+        self.copyForwardMessages = copyForwardMessages
         self.setupReplyMessage = setupReplyMessage
         self.setupEditMessage = setupEditMessage
         self.beginMessageSelection = beginMessageSelection
@@ -326,7 +332,7 @@ final class ChatPanelInterfaceInteraction {
         updateInputModeAndDismissedButtonKeyboardMessageId: @escaping ((ChatPresentationInterfaceState) -> (ChatInputMode, MessageId?)) -> Void,
         openLinkEditing: @escaping () -> Void
     ) {
-        self.init(setupReplyMessage: { _, _ in
+        self.init(cloudMessages: { _ in }, copyForwardMessages: { _ in },setupReplyMessage: { _, _ in
         }, setupEditMessage: { _, _ in
         }, beginMessageSelection: { _, _ in
         }, deleteSelectedMessages: {

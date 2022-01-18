@@ -202,13 +202,14 @@ filegroup(
         "Telegram-iOS/en.lproj/Localizable.strings",
     ] + [
         "{}.lproj/Localizable.strings".format(language) for language in empty_languages
-    ],
+    ] + glob(["Telegram-iOS/*.lproj/WellLocalizable.strings"]),
 )
 
 filegroup(
     name = "WatchAppStringResources",
     srcs = glob([
         "Telegram-iOS/*.lproj/Localizable.strings",
+        "Telegram-iOS/*.lproj/WellLocalizable.strings",
     ], exclude = ["Telegram-iOS/*.lproj/**/.*"]),
 )
 

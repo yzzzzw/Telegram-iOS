@@ -27,6 +27,16 @@ import ReactionListContextMenuContent
 import TelegramUIPreferences
 import Translate
 
+
+
+
+// MARK: Wellgram Imports
+import WGUI
+import WGStrings
+import WGTranslate
+import PeerInfoUI
+//
+
 private struct MessageContextMenuData {
     let starStatus: Bool?
     let canReply: Bool
@@ -1191,6 +1201,71 @@ func contextMenuForChatPresentationInterfaceState(chatPresentationInterfaceState
         }
 
         if !isPinnedMessages, !isReplyThreadHead, data.canSelect {
+            if !actions.isEmpty {
+                actions.append(.separator)
+            }
+            
+            // MARK: Wellgram Context Menu
+            let presentationData = context.sharedContext.currentPresentationData.with { $0 }
+            let locale = presentationData.strings.baseLanguageCode
+            
+            // Copyforward
+            if data.messageActions.options.contains(.forward) {
+                actions.append(.action(ContextMenuActionItem(text: l("Chat.ForwardAsCopy", chatPresentationInterfaceState.strings.baseLanguageCode), icon: { theme in
+                    return generateTintedImage(image: UIImage(bundleImageName: "CopyForward"), color: theme.actionSheet.primaryTextColor)
+                }, action: { _, f in
+                        interfaceInteraction.copyForwardMessages(selectAll ? messages : [message])
+                    f(.dismissWithoutContent)
+                })))
+            }
+            
+            // Translate
+            if !message.text.isEmpty {
+                var title = l("Messages.Translate", locale)
+                var mode = "translate"
+                if message.text.contains(gTranslateSeparator) {
+                    title = l("Messages.UndoTranslate", locale)
+                    mode = "undo-translate"
+                }
+                actions.append(.action(ContextMenuActionItem(text: title, icon: { theme in
+                    return generateTintedImage(image: UIImage(bundleImageName: "NGTranslateIcon"), color: theme.actionSheet.primaryTextColor)
+                }, action: { _, f in
+                    if mode == "undo-translate" {
+                        var newMessageText = message.text
+                        if let dotRange = newMessageText.range(of: "\n\n" + gTranslateSeparator) {
+                            newMessageText.removeSubrange(dotRange.lowerBound..<newMessageText.endIndex)
+                        }
+                        let _ = (context.account.postbox.transaction { transaction -> Void in
+                            transaction.updateMessage(message.id, update: { currentMessage in
+                                var storeForwardInfo: StoreMessageForwardInfo?
+                                if let forwardInfo = currentMessage.forwardInfo {
+                                    storeForwardInfo = StoreMessageForwardInfo(authorId: forwardInfo.author?.id, sourceId: forwardInfo.source?.id, sourceMessageId: forwardInfo.sourceMessageId, date: forwardInfo.date, authorSignature: forwardInfo.authorSignature, psaType: forwardInfo.psaType, flags: forwardInfo.flags)
+                                }
+                                
+                                return .update(StoreMessage(id: currentMessage.id, globallyUniqueId: currentMessage.globallyUniqueId, groupingKey: currentMessage.groupingKey, threadId: currentMessage.threadId, timestamp: currentMessage.timestamp, flags: StoreMessageFlags(currentMessage.flags), tags: currentMessage.tags, globalTags: currentMessage.globalTags, localTags: currentMessage.localTags, forwardInfo: storeForwardInfo, authorId: currentMessage.author?.id, text: newMessageText, attributes: currentMessage.attributes, media: currentMessage.media))
+                            })
+                        }).start()
+                    } else {
+                        let _ = (gtranslate(message.text, presentationData.strings.baseLanguageCode)  |> deliverOnMainQueue).start(next: { translated in
+                            let newMessageText = message.text + "\n\n\(gTranslateSeparator)\n" + translated
+                            let _ = (context.account.postbox.transaction { transaction -> Void in
+                                transaction.updateMessage(message.id, update: { currentMessage in
+                                    var storeForwardInfo: StoreMessageForwardInfo?
+                                    if let forwardInfo = currentMessage.forwardInfo {
+                                        storeForwardInfo = StoreMessageForwardInfo(authorId: forwardInfo.author?.id, sourceId: forwardInfo.source?.id, sourceMessageId: forwardInfo.sourceMessageId, date: forwardInfo.date, authorSignature: forwardInfo.authorSignature, psaType: forwardInfo.psaType, flags: forwardInfo.flags)
+                                    }
+
+                                    return .update(StoreMessage(id: currentMessage.id, globallyUniqueId: currentMessage.globallyUniqueId, groupingKey: currentMessage.groupingKey, threadId:  currentMessage.threadId, timestamp: currentMessage.timestamp, flags: StoreMessageFlags(currentMessage.flags), tags: currentMessage.tags, globalTags: currentMessage.globalTags, localTags: currentMessage.localTags, forwardInfo: storeForwardInfo, authorId: currentMessage.author?.id, text: newMessageText, attributes: currentMessage.attributes, media: currentMessage.media))
+                                })
+                            }).start()
+                        }, error: { _ in
+                            
+                        })
+                    }
+                    f(.default)
+                })))
+            }
+            
             var didAddSeparator = false
             if !selectAll || messages.count == 1 {
                 if !actions.isEmpty && !didAddSeparator {

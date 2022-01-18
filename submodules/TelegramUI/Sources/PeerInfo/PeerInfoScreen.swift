@@ -246,7 +246,7 @@ final class PeerInfoSelectionPanelNode: ASDisplayNode {
         self.selectionPanel = ChatMessageSelectionInputPanelNode(theme: presentationData.theme, strings: presentationData.strings, peerMedia: true)
         self.selectionPanel.context = context
         
-        let interfaceInteraction = ChatPanelInterfaceInteraction(setupReplyMessage: { _, _ in
+        let interfaceInteraction = ChatPanelInterfaceInteraction(cloudMessages: { _ in }, copyForwardMessages: { _ in }, setupReplyMessage: { _, _ in
         }, setupEditMessage: { _, _ in
         }, beginMessageSelection: { _, _ in
         }, deleteSelectedMessages: {
